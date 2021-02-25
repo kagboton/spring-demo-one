@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- add entry to enable component scanning -->
+	<context:component-scan base-package="com.kagboton.springdemo" />
+	
+	<!-- add entry to enable properties file: sport.properties -->
+	<context:property-placeholder location="classpath:sport.properties"/>
+	
+	<!-- define the dependency -->
+	<bean id="myFortuneService" class="com.kagboton.springdemo.HappyFortuneService"> </bean>
+	<bean id="awersomeFortuneService" class="com.kagboton.springdemo.AwersomeFortuneService"></bean>
+	
+	<!-- define coach bean -->
+	<bean id="myCoach" class="com.kagboton.springdemo.BaseballCoach">
+		<!-- set up constructor injection -->
+		<constructor-arg ref="myFortuneService"/>
+	</bean>
+	
+	<bean id="myTennisCoach" class="com.kagboton.springdemo.TennisCoach">
+		<!-- set up setter injection -->
+		<property name="fortuneService" ref="myFortuneService"/>	
+		<property name="emailAddress" value="${foo.email}"/>
+		<property name="team" value="${foo.team}"/>	
+	</bean>
+	
+	<!-- define TrackCoach bean and inject AwersomeFortuneService dependency  -->
+	<bean id="myTrackCoach" class="com.kagboton.springdemo.TrackCoach">
+		<!-- set up setter injection -->
+		<property name="fortuneService" ref="awersomeFortuneService" />
+	</bean>
+	
+	<!-- define logger bean -->
+	<bean id="myLoggerConfig" class="com.kagboton.springdemo.MyLoggerConfig" init-method="initLogger">
+    	<property name="rootLoggerLevel" value="FINE" />
+    	<property name="printedLoggerLevel" value="FINE"/>
+    </bean>
+
+</beans>
+
+
+
+
+
